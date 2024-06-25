@@ -1,13 +1,15 @@
 import { ReactNode } from 'react';
 
 import {
+  BoxProps,
+  Flex,
+  FlexProps,
   FormControl,
   FormControlProps,
   FormErrorMessage,
   FormErrorMessageProps,
   FormHelperText,
-  FormLabel,
-  FormLabelProps,
+  Text,
   TextProps,
 } from '@chakra-ui/react';
 
@@ -18,7 +20,9 @@ interface FormHelperProps extends FormControlProps {
   label?: string;
   children: ReactNode | ReactNode[];
 
-  labelProps?: FormLabelProps;
+  wrapperProps?: FlexProps;
+  labelProps?: BoxProps;
+  labelTextProps?: TextProps;
   successTextProps?: TextProps;
   helperTextProps?: TextProps;
   errorTextProps?: FormErrorMessageProps;
@@ -41,7 +45,9 @@ const FormHelper = ({
   children,
   label,
 
+  wrapperProps,
   labelProps,
+  labelTextProps,
   successTextProps,
   helperTextProps,
   errorTextProps,
@@ -53,16 +59,31 @@ const FormHelper = ({
   const isShowHelper = !!helperText && !isShowErrorText && !isShowErrorText;
 
   return (
-    <FormControl isInvalid={!!errorText} {...basisProps}>
-      {!!label && (
-        <FormLabel fontWeight="bold" mb="20px" {...labelProps}>
-          {label}
-        </FormLabel>
-      )}
-      {children}
-      {isShowErrorText && (
-        <FormErrorMessage {...errorTextProps}>{errorText}</FormErrorMessage>
-      )}
+    <FormControl
+      display="flex"
+      flexDirection="column"
+      isInvalid={!!errorText}
+      {...basisProps}
+    >
+      <Flex w="100%" h="100%" alignItems="center" {...wrapperProps}>
+        {!!label && (
+          <Flex as="label" columnGap="4px" {...labelProps}>
+            <Text as="label" {...labelTextProps}>
+              {label}
+            </Text>
+            {basisProps.isRequired && '*'}
+          </Flex>
+        )}
+        <Flex w="100%" h="100%" direction="column">
+          {children}
+          {isShowErrorText && (
+            <FormErrorMessage color="#E53E3E" {...errorTextProps}>
+              {errorText}
+            </FormErrorMessage>
+          )}
+        </Flex>
+      </Flex>
+
       {isShowSuccessText && (
         <FormHelperText color="custom.primary" {...successTextProps}>
           {successText}

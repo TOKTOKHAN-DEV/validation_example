@@ -2,25 +2,58 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "@/types/*": ["./types/*"],
-      "@/configs/*": ["./configs/*"],
-      "@/components/*": ["./components/*"],
-      "@/containers/*": ["./containers/*"],
-      "@/apis/*": ["./apis/*"],
-      "@/constants/*": ["./constants/*"],
-      "@/hocs/*": ["./hocs/*"],
-      "@/hooks/*": ["./hooks/*"],
-      "@/utils/*": ["./utils/*"],
-      "@/contexts/*": ["./contexts/*"],
-      "@/theme/*": ["./configs/theme/*"],
-
-      "@/swagger/*": ["./generated/swagger/*"],
-      "@/images": ["./generated/path/images.ts"],
-      "@/icons": ["./generated/icons/MyIcons.tsx"],
-      "@/generated/*": ["./generated/*"]
+      "@/types/*": [
+        "./types/*"
+      ],
+      "@/configs/*": [
+        "./configs/*"
+      ],
+      "@/components/*": [
+        "./components/*"
+      ],
+      "@/containers/*": [
+        "./containers/*"
+      ],
+      "@/apis/*": [
+        "./apis/*"
+      ],
+      "@/constants/*": [
+        "./constants/*"
+      ],
+      "@/hocs/*": [
+        "./hocs/*"
+      ],
+      "@/hooks/*": [
+        "./hooks/*"
+      ],
+      "@/utils/*": [
+        "./utils/*"
+      ],
+      "@/contexts/*": [
+        "./contexts/*"
+      ],
+      "@/theme/*": [
+        "./configs/theme/*"
+      ],
+      "@/swagger/*": [
+        "./generated/swagger/*"
+      ],
+      "@/images": [
+        "./generated/path/images.ts"
+      ],
+      "@/icons": [
+        "./generated/icons/MyIcons.tsx"
+      ],
+      "@/generated/*": [
+        "./generated/*"
+      ]
     },
     "target": "ES6",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
@@ -33,8 +66,23 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "app.d.ts", "**/*.ts", "**/*.tsx", "**/*.d.ts"],
-  "exclude": ["node_modules", "./public/mockServiceWorker.js"]
+  "include": [
+    "next-env.d.ts",
+    "app.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "./public/mockServiceWorker.js"
+  ]
 }
