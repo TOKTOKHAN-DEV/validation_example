@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { Controller, FormProvider } from 'react-hook-form';
+import { Controller, FormProvider, useWatch } from 'react-hook-form';
 
 import {
   Box,
@@ -22,6 +22,7 @@ import {
 import FormHelper from '@/components/FormHelper';
 import useSignupForm, { SignupFormDataType } from '@/hooks/useSignup';
 
+import { regex } from '@/constants/regex';
 import { VisibleIcon } from '@/icons';
 import { formatBirthdate } from '@/utils/format/format-birthdate';
 import { formatPhoneNumberKR } from '@/utils/format/format-phone-number-kr';
@@ -30,6 +31,7 @@ interface FormHelper extends ChakraProps {
   wrapperProps: FlexProps;
   labelProps: BoxProps;
   labelTextProps: TextProps;
+  helperTextProps: TextProps;
 }
 
 export const FORM_HELPER_STYLE: FormHelper = {
@@ -48,6 +50,9 @@ export const FORM_HELPER_STYLE: FormHelper = {
     color: '#718096',
     textStyle: 'pre-heading-06',
   },
+  helperTextProps: {
+    color: '#718096',
+  },
 };
 
 export const FORM_INPUT_STYLE: InputProps = {
@@ -59,13 +64,21 @@ export const FORM_INPUT_STYLE: InputProps = {
   borderColor: '#E2E8F0',
   borderRadius: '4px',
   _focusVisible: {
-    borderColor: 'border.active',
-    boxShadow: '0 0 0 1px var(--chakra-colors-border-active)',
+    borderColor: '#3182CE',
+    boxShadow: '0 0 0 1px #3182CE',
   },
   _placeholder: {
     color: 'text.tertiary',
   },
 };
+
+const EMAIL_LIST = [
+  'gmail.com',
+  'naver.com',
+  'hanmail.net',
+  'nate.com',
+  'daum.net',
+];
 
 function Home() {
   const method = useSignupForm();
@@ -73,11 +86,20 @@ function Home() {
   const {
     control,
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = method;
 
   const [isVisible, setIsVisible] = useState(false);
+
+  const [isVisibleEmailList, setIsVisibleEmailList] = useState(false);
+
+  const email = useWatch({ control, name: 'email' }) || '';
+
+  const [local, domain] = email?.split('@');
+
+  const { onBlur, ...restOfEmail } = register('email');
 
   const onSubmit = handleSubmit(
     (v) => {
@@ -151,11 +173,53 @@ function Home() {
                   {...FORM_HELPER_STYLE}
                   errorText={errors.email?.message}
                 >
-                  <Input
-                    {...FORM_INPUT_STYLE}
-                    placeholder="이메일을 입력해 주세요"
-                    {...register('email')}
-                  />
+                  <Box w="100%" position="relative">
+                    <Input
+                      autoComplete="off"
+                      {...FORM_INPUT_STYLE}
+                      placeholder="이메일을 입력해 주세요"
+                      {...restOfEmail}
+                    />
+                    {!email.match(regex.EMAIL) && email?.includes('@') && (
+                      <Flex
+                        position="absolute"
+                        top="49px"
+                        zIndex={10}
+                        direction="column"
+                        w="100%"
+                        maxH="144px"
+                        overflow="auto"
+                        bg="white"
+                        border="1px"
+                        borderColor="#E2E8F0"
+                        rounded="6px"
+                      >
+                        {EMAIL_LIST.filter((el) => el.includes(domain)).map(
+                          (item) => (
+                            <Flex
+                              as="button"
+                              type="button"
+                              key={item}
+                              px="16px"
+                              py="13px"
+                              _hover={{
+                                bg: 'rgba(112, 115, 124, 0.08)',
+                              }}
+                              onClick={() => {
+                                setValue('email', `${local}@${item}`, {
+                                  shouldValidate: true,
+                                });
+                              }}
+                            >
+                              <Text>
+                                {local}@{item}
+                              </Text>
+                            </Flex>
+                          ),
+                        )}
+                      </Flex>
+                    )}
+                  </Box>
                 </FormHelper>
                 <FormHelper
                   isRequired
@@ -165,7 +229,7 @@ function Home() {
                 >
                   <Input
                     {...FORM_INPUT_STYLE}
-                    placeholder="아이디 입력해 주세요"
+                    placeholder="아이디를 입력해 주세요"
                     {...register('id')}
                   />
                 </FormHelper>
@@ -206,6 +270,7 @@ function Home() {
                   label="비밀번호 재입력"
                   {...FORM_HELPER_STYLE}
                   errorText={errors.passwordConfirm?.message}
+                  helperText="8~20자로 영문, 숫자, 특수문자를 각 1자 이상 포함해 주세요"
                 >
                   <Input
                     type="password"
@@ -240,6 +305,7 @@ function Home() {
                   label="닉네임"
                   {...FORM_HELPER_STYLE}
                   errorText={errors.nickname?.message}
+                  helperText="2~10자로 입력해 주세요"
                 >
                   <Input
                     {...FORM_INPUT_STYLE}

@@ -4,7 +4,7 @@ export const helperText = {
   REQUIRED_CHECKBOX: '필수 동의 항목이에요',
 
   ID: {
-    COMMON: '4~16자로 영문, 숫자를 각 1자 이상 포함해 주세요',
+    COMMON: '4~16자로 영문, 숫자를 이용해 만들어 주세요',
     SPECIAL_CHARACTER: '특수문자를 사용할 수 없어요',
   },
   PASSWORD: '8~20자로 영문, 숫자, 특수문자를 각 1자 이상 포함해 주세요',
