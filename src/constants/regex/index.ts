@@ -7,7 +7,7 @@ export const regex = {
   },
   NICKNAME: /^[0-9a-zA-Z가-힣]+$/,
   EMAIL: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-  PHONE: /^(\d){3}-(\d){4}-(\d){4}$/,
+  PHONE: /^010-(\d){4}-(\d){4}$/,
   PASSWORD: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/,
   EMAIL_VERIFICATION_CODE: /^\d+$/g,
   USERNAME: /^[0-9a-zA-Z가-힣]+$/,
