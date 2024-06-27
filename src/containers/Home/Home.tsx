@@ -368,7 +368,7 @@ function Home() {
                       </InputRightElement>
                     </InputGroup>
                   </FormHelper>
-                  <Text fontSize="16px" color="#718096">
+                  <Text fontSize="14px" color="#718096">
                     8~20자로 영문, 숫자, 특수문자를 각 1자 이상 포함해 주세요
                   </Text>
                 </Flex>
