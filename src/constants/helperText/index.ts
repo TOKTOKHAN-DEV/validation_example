@@ -7,7 +7,7 @@ export const helperText = {
     COMMON: '4~16자로 영문, 숫자를 이용해 만들어 주세요',
     SPECIAL_CHARACTER: '특수문자를 사용할 수 없어요',
   },
-  PASSWORD: '8~20자로 영문, 숫자, 특수문자를 각 1자 이상 포함해 주세요',
+  PASSWORD: '비밀번호 형식을 확인해 주세요',
   PASSWORD_CONFIRM: '입력하신 비밀번호와 일치하지 않아요',
   BIRTHDATE: {
     COMMON: '1999-01-01 형식으로 입력해 주세요',

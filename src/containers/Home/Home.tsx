@@ -23,7 +23,7 @@ import FormHelper from '@/components/FormHelper';
 import useSignupForm, { SignupFormDataType } from '@/hooks/useSignup';
 
 import { regex } from '@/constants/regex';
-import { VisibleIcon } from '@/icons';
+import { InvisibleIcon, VisibleIcon } from '@/icons';
 import { formatBirthdate } from '@/utils/format/format-birthdate';
 import { formatPhoneNumberKR } from '@/utils/format/format-phone-number-kr';
 
@@ -62,7 +62,7 @@ export const FORM_INPUT_STYLE: InputProps = {
   fontSize: '16px',
   border: '1px solid',
   borderColor: '#E2E8F0',
-  borderRadius: '4px',
+  borderRadius: '6px',
   _focusVisible: {
     borderColor: '#3182CE',
     boxShadow: '0 0 0 1px #3182CE',
@@ -91,7 +91,10 @@ function Home() {
     formState: { errors },
   } = method;
 
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState({
+    password: false,
+    passwordConfirm: false,
+  });
 
   const [isVisibleEmailList, setIsVisibleEmailList] = useState(false);
 
@@ -141,6 +144,16 @@ function Home() {
                 >
                   <Input
                     {...FORM_INPUT_STYLE}
+                    _focusVisible={
+                      !!errors.username
+                        ? {
+                            borderColor: 'var(--chakra-colors-red-500)',
+                            boxShadow: '0 0 0 1px var(--chakra-colors-red-500)',
+                          }
+                        : {
+                            ...FORM_INPUT_STYLE['_focusVisible'],
+                          }
+                    }
                     placeholder="이름을 입력해 주세요"
                     {...register('username')}
                   />
@@ -157,6 +170,17 @@ function Home() {
                     render={({ field: { value, onChange } }) => (
                       <Input
                         {...FORM_INPUT_STYLE}
+                        _focusVisible={
+                          !!errors.birthdate
+                            ? {
+                                borderColor: 'var(--chakra-colors-red-500)',
+                                boxShadow:
+                                  '0 0 0 1px var(--chakra-colors-red-500)',
+                              }
+                            : {
+                                ...FORM_INPUT_STYLE['_focusVisible'],
+                              }
+                        }
                         placeholder="1991-01-01"
                         {...register('birthdate')}
                         value={value || ''}
@@ -177,6 +201,17 @@ function Home() {
                     <Input
                       autoComplete="off"
                       {...FORM_INPUT_STYLE}
+                      _focusVisible={
+                        !!errors.email
+                          ? {
+                              borderColor: 'var(--chakra-colors-red-500)',
+                              boxShadow:
+                                '0 0 0 1px var(--chakra-colors-red-500)',
+                            }
+                          : {
+                              ...FORM_INPUT_STYLE['_focusVisible'],
+                            }
+                      }
                       placeholder="이메일을 입력해 주세요"
                       {...restOfEmail}
                     />
@@ -229,56 +264,114 @@ function Home() {
                 >
                   <Input
                     {...FORM_INPUT_STYLE}
+                    _focusVisible={
+                      !!errors.id
+                        ? {
+                            borderColor: 'var(--chakra-colors-red-500)',
+                            boxShadow: '0 0 0 1px var(--chakra-colors-red-500)',
+                          }
+                        : {
+                            ...FORM_INPUT_STYLE['_focusVisible'],
+                          }
+                    }
                     placeholder="아이디를 입력해 주세요"
                     {...register('id')}
                   />
                 </FormHelper>
-                <FormHelper
-                  isRequired
-                  label="비밀번호"
-                  {...FORM_HELPER_STYLE}
-                  errorText={errors.password?.message}
-                >
-                  <InputGroup>
-                    <Input
-                      type={isVisible ? 'text' : 'password'}
-                      {...FORM_INPUT_STYLE}
-                      placeholder="비밀번호를 입력해 주세요"
-                      {...register('password')}
-                    />
-                    <InputRightElement
-                      as="button"
-                      type="button"
-                      tabIndex={-1}
-                      top="50%"
-                      transform="translateY(-50%)"
-                      onClick={() => {
-                        setIsVisible((props) => !props);
-                      }}
-                      sx={{
-                        '&>svg>path': {
-                          fill: isVisible ? '#333' : '#A0AEC0',
-                        },
-                      }}
-                    >
-                      <VisibleIcon />
-                    </InputRightElement>
-                  </InputGroup>
-                </FormHelper>
-                <FormHelper
-                  isRequired
-                  label="비밀번호 재입력"
-                  {...FORM_HELPER_STYLE}
-                  errorText={errors.passwordConfirm?.message}
-                  helperText="8~20자로 영문, 숫자, 특수문자를 각 1자 이상 포함해 주세요"
-                >
-                  <Input
-                    type="password"
-                    {...FORM_INPUT_STYLE}
-                    placeholder="비밀번호를 한 번 더 입력해 주세요"
-                    {...register('passwordConfirm')}
-                  />
-                </FormHelper>
+                <Flex direction="column" rowGap="8px">
+                  <FormHelper
+                    isRequired
+                    label="비밀번호"
+                    {...FORM_HELPER_STYLE}
+                    errorText={errors.password?.message}
+                  >
+                    <InputGroup>
+                      <Input
+                        type={isVisible.password ? 'text' : 'password'}
+                        {...FORM_INPUT_STYLE}
+                        _focusVisible={
+                          !!errors.password
+                            ? {
+                                borderColor: 'var(--chakra-colors-red-500)',
+                                boxShadow:
+                                  '0 0 0 1px var(--chakra-colors-red-500)',
+                              }
+                            : {
+                                ...FORM_INPUT_STYLE['_focusVisible'],
+                              }
+                        }
+                        placeholder="비밀번호를 입력해 주세요"
+                        {...register('password')}
+                      />
+                      <InputRightElement
+                        as="button"
+                        type="button"
+                        tabIndex={-1}
+                        top="50%"
+                        transform="translateY(-50%)"
+                        onClick={() => {
+                          setIsVisible((props) => ({
+                            ...props,
+                            password: !props.password,
+                          }));
+                        }}
+                      >
+                        {isVisible.password ? (
+                          <InvisibleIcon />
+                        ) : (
+                          <VisibleIcon />
+                        )}
+                      </InputRightElement>
+                    </InputGroup>
+                  </FormHelper>
+                  <FormHelper
+                    isRequired
+                    {...FORM_HELPER_STYLE}
+                    errorText={errors.passwordConfirm?.message}
+                  >
+                    <InputGroup>
+                      <Input
+                        type={isVisible.passwordConfirm ? 'text' : 'password'}
+                        {...FORM_INPUT_STYLE}
+                        _focusVisible={
+                          !!errors.passwordConfirm
+                            ? {
+                                borderColor: 'var(--chakra-colors-red-500)',
+                                boxShadow:
+                                  '0 0 0 1px var(--chakra-colors-red-500)',
+                              }
+                            : {
+                                ...FORM_INPUT_STYLE['_focusVisible'],
+                              }
+                        }
+                        placeholder="비밀번호를 한 번 더 입력해 주세요"
+                        {...register('passwordConfirm')}
+                      />
+                      <InputRightElement
+                        as="button"
+                        type="button"
+                        tabIndex={-1}
+                        top="50%"
+                        transform="translateY(-50%)"
+                        onClick={() => {
+                          setIsVisible((props) => ({
+                            ...props,
+                            passwordConfirm: !props.passwordConfirm,
+                          }));
+                        }}
+                      >
+                        {isVisible.passwordConfirm ? (
+                          <InvisibleIcon />
+                        ) : (
+                          <VisibleIcon />
+                        )}
+                      </InputRightElement>
+                    </InputGroup>
+                  </FormHelper>
+                  <Text fontSize="16px" color="#718096">
+                    8~20자로 영문, 숫자, 특수문자를 각 1자 이상 포함해 주세요
+                  </Text>
+                </Flex>
                 <FormHelper
                   isRequired
                   label="휴대폰 번호"
@@ -291,6 +384,17 @@ function Home() {
                     render={({ field: { value, onChange } }) => (
                       <Input
                         {...FORM_INPUT_STYLE}
+                        _focusVisible={
+                          !!errors.phone
+                            ? {
+                                borderColor: 'var(--chakra-colors-red-500)',
+                                boxShadow:
+                                  '0 0 0 1px var(--chakra-colors-red-500)',
+                              }
+                            : {
+                                ...FORM_INPUT_STYLE['_focusVisible'],
+                              }
+                        }
                         placeholder="휴대폰 번호를 입력해 주세요"
                         {...register('phone')}
                         value={value || ''}
@@ -309,6 +413,16 @@ function Home() {
                 >
                   <Input
                     {...FORM_INPUT_STYLE}
+                    _focusVisible={
+                      !!errors.nickname
+                        ? {
+                            borderColor: 'var(--chakra-colors-red-500)',
+                            boxShadow: '0 0 0 1px var(--chakra-colors-red-500)',
+                          }
+                        : {
+                            ...FORM_INPUT_STYLE['_focusVisible'],
+                          }
+                    }
                     placeholder="닉네임을 입력해 주세요"
                     {...register('nickname')}
                   />
